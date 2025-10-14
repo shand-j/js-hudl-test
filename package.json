@@ -1,0 +1,24 @@
+{
+  "name": "js-hudl-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "install:browser": "npx playwright install",
+    "report:html": "npx playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@faker-js/faker": "^10.0.0",
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.7.2",
+    "install": "^0.13.0",
+    "npm": "^11.6.2"
+  }
+}
