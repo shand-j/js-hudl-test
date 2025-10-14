@@ -32,7 +32,7 @@ jobs:
     - name: Install Playwright Browsers
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       id: install-browsers
-      run: npx playwright install --with-deps ${{ steps.playwright-version.outputs.PLAYWRIGHT_VERSION }}
+      run: npx playwright install --with-deps 
     
     - name: Cache Latest Browsers
       if: steps.install-browsers.outcome == 'success'
