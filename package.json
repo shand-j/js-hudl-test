@@ -5,20 +5,26 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
+    "test:dev": "npx playwright test --project=chromium",
+    "test:ui": "npx playwright test --ui",
     "test:headed": "npx playwright test --headed",
     "test:debug": "npx playwright test --debug",
-    "install:browser": "npx playwright install",
+    "install:browsers": "npx playwright install --with-deps",
     "report:html": "npx playwright show-report"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
+    "@eslint/js": "^9.37.0",
     "@faker-js/faker": "^10.0.0",
     "@playwright/test": "^1.56.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "^24.7.2",
     "install": "^0.13.0",
-    "npm": "^11.6.2"
+    "npm": "^11.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.1"
   }
 }

@@ -1,10 +1,9 @@
-import { Page, Locator } from '@playwright/test';
-import type { LoginInputSelector, LoginButtonText, LoginErrorText, LoginLinkText } from './types';
-import { LOGIN_SELECTORS } from '../utils/constants';
+import type { Page, Locator } from '@playwright/test';
 
 export class LoginPage {
   readonly page: Page;
   readonly emailInput: Locator;
+  readonly emailEditButton: Locator;
   readonly passwordInput: Locator;
   readonly continueButton: Locator;
   readonly malformedEmailErrorMessage: Locator;
@@ -13,51 +12,41 @@ export class LoginPage {
   readonly invalidPasswordErrorMessage: Locator;
   readonly missingPasswordErrorMessage: Locator;
   readonly forgotPasswordLink: Locator;
-
-  private readonly emailSelector: LoginInputSelector;
-  private readonly passwordSelector: LoginInputSelector;
-  private readonly continueButtonText: LoginButtonText;
-  private readonly malformedEmailErrorMessageText: LoginErrorText;
-  private readonly missingEmailErrorMessageText: LoginErrorText;
-  private readonly invalidEmailErrorMessageText: LoginErrorText;
-  private readonly invalidPasswordErrorMessageText: LoginErrorText;
-  private readonly missingPasswordErrorMessageText: LoginErrorText;
-  private readonly forgotPasswordLinkText: LoginLinkText;
+  readonly togglePasswordButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
-
-    this.emailSelector = LOGIN_SELECTORS.inputs.email;
-    this.passwordSelector = LOGIN_SELECTORS.inputs.password;
-    this.continueButtonText = LOGIN_SELECTORS.buttons.continue;
-    this.malformedEmailErrorMessageText = LOGIN_SELECTORS.errorMessages.malformedEmail;
-    this.missingEmailErrorMessageText = LOGIN_SELECTORS.errorMessages.missingEmail;
-    this.missingPasswordErrorMessageText = LOGIN_SELECTORS.errorMessages.missingPassword;
-    this.invalidEmailErrorMessageText = LOGIN_SELECTORS.errorMessages.invalidEmail;
-    this.invalidPasswordErrorMessageText = LOGIN_SELECTORS.errorMessages.invalidPassword;
-    this.forgotPasswordLinkText = LOGIN_SELECTORS.links.forgotPassword;
-
-    this.emailInput = page.locator(this.emailSelector);
-    this.passwordInput = page.locator(this.passwordSelector);
-    this.continueButton = page.getByText(this.continueButtonText, { exact: true });
-    this.malformedEmailErrorMessage = page.getByText(this.malformedEmailErrorMessageText, { exact: true });
-    this.missingEmailErrorMessage = page.getByText(this.missingEmailErrorMessageText, { exact: true });
-    this.missingPasswordErrorMessage = page.getByText(this.missingPasswordErrorMessageText, { exact: true });
-    this.invalidEmailErrorMessage = page.getByText(this.invalidEmailErrorMessageText, { exact: true });
-    this.invalidPasswordErrorMessage = page.getByText(this.invalidPasswordErrorMessageText, { exact: true });
-    this.forgotPasswordLink = page.getByText(this.forgotPasswordLinkText, { exact: true });
+    this.emailInput = page.locator('input[name="username"], #username');
+    this.emailEditButton = page.getByText('Edit', { exact: true });
+    this.passwordInput = page.locator('input[name="password"], #password');
+    this.continueButton = page.getByText('Continue', { exact: true });
+    this.malformedEmailErrorMessage = page.getByText('Enter a valid email.', { exact: true });
+    this.missingEmailErrorMessage = page.getByText('Enter an email address', { exact: true });
+    this.missingPasswordErrorMessage = page.getByText('Enter your password.', { exact: true });
+    this.invalidEmailErrorMessage = page.getByText('Incorrect username or password.', { exact: true });
+    this.invalidPasswordErrorMessage = page.getByText('Your email or password is incorrect. Try again.', { exact: true });
+    this.forgotPasswordLink = page.getByText('Forgot Password', { exact: true });
+    this.togglePasswordButton = page.locator('button[aria-label="Show password"]');
   }
 
   async goTo() {
     await this.page.goto('/login');
   }
 
-  async getStateParam() {
+  async getStateParam(): Promise<string | null> {
     return this.page.url().includes('state=') ? new URL(this.page.url()).searchParams.get('state') : null;
   }
 
   async fillEmail(email: string) {
     await this.emailInput.fill(email);
+  }
+
+  async readEmail(): Promise<string> {
+    return this.emailInput.inputValue();
+  }
+
+  async clickEditEmail() {
+    await this.emailEditButton.click();
   }
 
   async fillPassword(password: string) {
@@ -74,6 +63,10 @@ export class LoginPage {
     
     await this.fillPassword(password);
     await this.clickContinue();
+  }
+
+  async togglePasswordVisibility() {
+    await this.togglePasswordButton.click();
   }
 
   async isFieldRequired(field: Locator): Promise<boolean> {

@@ -1,12 +1,14 @@
 name: Playwright Tests
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
+    inputs:
+      password:
+        description: 'Valid password for login'
+        required: true
 
 jobs:
   test:
-    timeout-minutes: 60
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -32,7 +34,7 @@ jobs:
     - name: Install Playwright Browsers
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       id: install-browsers
-      run: npx playwright install --with-deps 
+      run: npm run install:browsers
     
     - name: Cache Latest Browsers
       if: steps.install-browsers.outcome == 'success'
@@ -43,7 +45,10 @@ jobs:
         key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.PLAYWRIGHT_VERSION }}
 
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npm test
+      env:
+        CI: true
+        VALID_PASSWORD: ${{ github.event.inputs.password }}
 
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}

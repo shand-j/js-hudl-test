@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
-import { HUDL_URLS } from './utils/constants';
-import { TIMEOUTS } from './utils/constants';
+import { HUDL_URLS } from './utils/constants.ts';
+import { TIMEOUTS } from './utils/constants.ts';
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -17,7 +17,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? [
-    ['github'], ['html'],                             
+    ['github'],                             
   ] : [
     ['html']
   ],

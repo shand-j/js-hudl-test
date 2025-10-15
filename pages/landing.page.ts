@@ -1,6 +1,4 @@
-import { Page, Locator } from '@playwright/test';
-import { HUDL_APPLICATIONS } from '../utils/constants';
-import type { ApplicationId, ApplicationKey } from './types';
+import type { Page, Locator } from '@playwright/test';
 
 export class LandingPage {
   readonly page: Page;
@@ -20,9 +18,7 @@ export class LandingPage {
     await this.loginSelectButton.click();
   }
 
-  async clickApplicationLogin(appKey: ApplicationKey) {
-    const appId: ApplicationId = HUDL_APPLICATIONS[appKey].id;
-    const locator: Locator = this.page.getByTestId(appId);
-    await locator.click();
+  async clickApplicationLogin(app: string) {
+    await this.page.getByTestId(`login-${app}`).click();
   }
 }
