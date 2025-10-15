@@ -37,10 +37,6 @@ npm run test:debug
 # Run tests on single browser (Chromium only)
 npm run test:dev
 ```
-### In Github
-The action has a `workflow_dispatch` that accepts a password input. I have submitted the password with this test.
-HTML Reporter is not integrated into CI as it outputs secrets in steps.
-
 
 ## Test Coverage
 Primary focus is that Users can access hudl and bad actors cannot.
